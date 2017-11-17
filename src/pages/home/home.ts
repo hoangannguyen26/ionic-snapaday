@@ -18,7 +18,12 @@ export class HomePage {
   photoTaken: boolean = false;
   photos: PhotoModel[] = [];
 
-  constructor(public navCtrl: NavController, private platform: Platform, private camera: Camera, private alert: SimpleAlert, private file: File, private dataService: DataProvider) {
+  constructor(public navCtrl: NavController, 
+    private platform: Platform, 
+    private camera: Camera, 
+    private alert: SimpleAlert, 
+    private file: File, 
+    private dataService: DataProvider) {
 
       this.loadPhotos();
       document.addEventListener('resume', ()=>{

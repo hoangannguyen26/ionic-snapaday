@@ -19,7 +19,7 @@
     <ion-item-sliding *ngFor="let photo of photos">
         <ion-item>
           <img [src]="photo.image"/>
-          <ion-badge item-right light>0 day(s) ago</ion-badge>
+          <ion-badge item-right light>{{photo.date | daysAgo}} day(s) ago</ion-badge>
         </ion-item>
         <ion-item-options>
           <button light (click)="removePhoto(photo)"><ion-icon name="trash"></ion-icon></button>

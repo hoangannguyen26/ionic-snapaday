@@ -2,7 +2,7 @@ import { DataProvider } from '../../providers/data/data';
 import { SimpleAlert } from '../../helper/simple-alert';
 import { PhotoModel } from '../../model/photo-model';
 import { Component } from '@angular/core';
-import { NavController, Platform, IonicPage } from 'ionic-angular';
+import { NavController, Platform, IonicPage, ModalController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 
@@ -19,6 +19,7 @@ export class HomePage {
   photos: PhotoModel[] = [];
 
   constructor(public navCtrl: NavController, 
+    private modalCtrl: ModalController,
     private platform: Platform, 
     private camera: Camera, 
     private alert: SimpleAlert, 
@@ -62,15 +63,10 @@ export class HomePage {
       let d = new Date(),
         n = d.getTime(),
         newFileName = n + '.jpg';
-      console.log("currentName =" + currentName);
-      console.log("currentPath =" + currentPath);
       if(this.platform.is('android')){
         this.file.moveFile(currentPath, currentName, this.file.dataDirectory, newFileName).then((success) => {
           this.photoTaken = true;
           this.createPhoto(success.nativeURL);
-          this.sharePhoto(success.nativeURL);
-          console.log("this.file.dataDirectory =" + this.file.dataDirectory);
-          console.log("newFileName =" + newFileName);
         }, (error) => {
           let promt = this.alert.create('Oops1', 'Something went wrong.'+error);
           promt.present();
@@ -126,5 +122,16 @@ export class HomePage {
       this.photos.splice(index, 1);
       this.save();
     }
+  }
+
+  playSlideShow(){
+    if(this.photos.length > 1) {
+      let modal = this.modalCtrl.create('SlideshowPage', { photos : this.photos});
+      modal.present();
+    } else {
+      let promt = this.alert.create('Oops!', 'You need at least two photos before you can play a slideshow');
+      promt.present();
+    }
+    
   }
 }

@@ -14,6 +14,7 @@ import { File } from '@ionic-native/file';
 import { MyApp } from './app.component';
 import { DataProvider } from '../providers/data/data';
 
+
 @NgModule({
   declarations: [
     MyApp
@@ -21,7 +22,8 @@ import { DataProvider } from '../providers/data/data';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [

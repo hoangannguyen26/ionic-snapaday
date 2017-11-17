@@ -1,12 +1,6 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
-/**
- * Generated class for the SlideshowPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -15,11 +9,38 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SlideshowPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  @ViewChild('imagePlayer') imagePlayer: ElementRef;
+
+  imagePlayerInterval: any;
+  photos: any;
+  
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private view: ViewController) {
+    this.photos = navParams.get('photos');
   }
 
+  closeModal(){
+    this.view.dismiss();
+  }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SlideshowPage');
+    this.playPhotos();
   }
+  
+  playPhotos() {
+    let imagePlayer = this.imagePlayer.nativeElement;
+    let i = 0;
 
+    clearInterval(this.imagePlayerInterval);
+
+    // reset
+    this.imagePlayerInterval = setInterval(() => {
+      if(i < this.photos.length){
+        imagePlayer.src = this.photos[i];
+        i ++;
+      } else {
+        clearInterval(this.imagePlayerInterval);
+      }
+    }, 500);
+
+  }
 }

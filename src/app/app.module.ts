@@ -1,9 +1,15 @@
+import { IonicStorageModule } from '@ionic/storage';
+import { SimpleAlert } from '../helper/simple-alert';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Camera } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
+
+
+
 
 import { MyApp } from './app.component';
 import { DataProvider } from '../providers/data/data';
@@ -14,7 +20,8 @@ import { DataProvider } from '../providers/data/data';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -25,7 +32,9 @@ import { DataProvider } from '../providers/data/data';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     DataProvider,
-    Camera
+    Camera,
+    SimpleAlert,
+    File
   ]
 })
 export class AppModule {}

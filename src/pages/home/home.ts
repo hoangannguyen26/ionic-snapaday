@@ -1,9 +1,11 @@
+import { DataProvider } from '../../providers/data/data';
 import { SimpleAlert } from '../../helper/simple-alert';
 import { PhotoModel } from '../../model/photo-model';
 import { Component } from '@angular/core';
 import { NavController, Platform, IonicPage } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
+
 
 @IonicPage()
 @Component({
@@ -16,7 +18,7 @@ export class HomePage {
   photoTaken: boolean = false;
   photos: PhotoModel[] = [];
 
-  constructor(public navCtrl: NavController, private platform: Platform, private camera: Camera, private alert: SimpleAlert, private file: File) {
+  constructor(public navCtrl: NavController, private platform: Platform, private camera: Camera, private alert: SimpleAlert, private file: File, private dataService: DataProvider) {
 
       this.loadPhotos();
       document.addEventListener('resume', ()=>{
@@ -55,15 +57,30 @@ export class HomePage {
         n = d.getTime(),
         newFileName = n + '.jpg';
       if(this.platform.is('android')){
-        File
+        this.file.moveFile(this.file.tempDirectory, currentName, this.file.dataDirectory, newFileName).then((success) => {
+          this.photoTaken = true;
+          this.createPhoto(success.nativeURL);
+          this.sharePhoto(success.nativeURL);
+        }, (error) => {
+          let promt = this.alert.create('Oops1', 'Something went wrong.'+error);
+          promt.present();
+        })
       }
     }, (err) => {
-      let promt = this.alert.create('Oops!', 'Something went wrong.');
+      let promt = this.alert.create('Oops!', 'Something went wrong.'+err);
       promt.present();
     });
 
   }
-  loadPhotos() {
+  createPhoto(photo) {
+    let newPhoto = new PhotoModel(photo, new Date());
+    this.photos.unshift(newPhoto);
+    this.dataService.save(this.photos);
+  }
+  sharePhoto(url) {
 
+  }
+  loadPhotos() {
+    this.loaded = true;
   }
 }

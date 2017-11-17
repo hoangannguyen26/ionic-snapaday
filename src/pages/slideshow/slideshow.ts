@@ -35,7 +35,7 @@ export class SlideshowPage {
     // reset
     this.imagePlayerInterval = setInterval(() => {
       if(i < this.photos.length){
-        imagePlayer.src = this.photos[i];
+        imagePlayer.src = this.photos[i].image;
         i ++;
       } else {
         clearInterval(this.imagePlayerInterval);

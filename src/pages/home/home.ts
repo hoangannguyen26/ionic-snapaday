@@ -31,7 +31,7 @@ export class HomePage {
         if(this.photos.length > 0){
           let today = new Date();
           if(this.photos[0].date.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
-            this.photoTaken = true;
+            // this.photoTaken = true;
           } else {
             this.photoTaken = false;
           }
@@ -65,7 +65,7 @@ export class HomePage {
         newFileName = n + '.jpg';
       if(this.platform.is('android')){
         this.file.moveFile(currentPath, currentName, this.file.dataDirectory, newFileName).then((success) => {
-          this.photoTaken = true;
+          // this.photoTaken = true;
           this.createPhoto(success.nativeURL);
         }, (error) => {
           let promt = this.alert.create('Oops1', 'Something went wrong.'+error);
@@ -83,7 +83,7 @@ export class HomePage {
     this.photos.unshift(newPhoto);
     this.save();
   }
-  sharePhoto(url) {
+  sharePhoto(image) {
 
   }
   save() {
@@ -105,7 +105,7 @@ export class HomePage {
       if(this.photos.length > 0) {
         let today = new Date();
         if(this.photos[0].date.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)){
-          this.photoTaken = true;
+          // this.photoTaken = true;
         }
       }
       this.loaded = true;

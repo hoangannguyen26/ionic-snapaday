@@ -1,14 +1,31 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="danger">
     <ion-title>
-      Ionic Blank
+      <img src="../assets/imgs/logo.png" />
     </ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="playSlideShow()"><ion-icon name="play"></ion-icon></button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content>
+  
+  <ion-list no-lines>
+
+    <button ion-item *ngIf="!photoTaken" detail-none (click)="takePhoto()">
+      <img src="../assets/imgs/smile.png"/>
+    </button>
+    <ion-item-sliding>
+        <ion-item>
+          <img src="http://placehold.it/100x100"/>
+          <ion-badge item-right light>0 day(s) ago</ion-badge>
+        </ion-item>
+        <ion-item-options>
+          <button light (click)="removePhoto(photo)"><ion-icon name="trash"></ion-icon></button>
+        </ion-item-options>
+      </ion-item-sliding>
+
+  </ion-list>
+
 </ion-content>

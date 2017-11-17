@@ -5,6 +5,8 @@ import { Component } from '@angular/core';
 import { NavController, Platform, IonicPage, ModalController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
+import { SocialSharing } from '@ionic-native/social-sharing';
+import { AlertController } from 'ionic-angular/components/alert/alert-controller';
 
 
 @IonicPage()
@@ -19,10 +21,12 @@ export class HomePage {
   photos: PhotoModel[] = [];
 
   constructor(public navCtrl: NavController, 
+    private socialSharing: SocialSharing,
     private modalCtrl: ModalController,
     private platform: Platform, 
     private camera: Camera, 
-    private alert: SimpleAlert, 
+    private alert: SimpleAlert,
+    private alertCtrl: AlertController,
     private file: File, 
     private dataService: DataProvider) {
 
@@ -67,6 +71,7 @@ export class HomePage {
         this.file.moveFile(currentPath, currentName, this.file.dataDirectory, newFileName).then((success) => {
           // this.photoTaken = true;
           this.createPhoto(success.nativeURL);
+          this.sharePhoto(success.nativeURL);
         }, (error) => {
           let promt = this.alert.create('Oops1', 'Something went wrong.'+error);
           promt.present();
@@ -84,7 +89,26 @@ export class HomePage {
     this.save();
   }
   sharePhoto(image) {
-
+    let promt = this.alertCtrl.create({
+      title: 'Nice one!',
+      message:'You\' taken your photo for today,  would you also like to share it?',
+      buttons:[
+        {
+          text: 'No, thanks!'
+        },
+        {
+          text: 'Share',
+          handler:()=> {
+            this.socialSharing.shareViaFacebook("It's the handsome boy", image, null).then(()=>{
+              alert('Well done');
+            }, (error) => {
+              alert(error);
+            })
+          }
+        }
+      ]
+    });
+    promt.present();
   }
   save() {
     this.dataService.save(this.photos);

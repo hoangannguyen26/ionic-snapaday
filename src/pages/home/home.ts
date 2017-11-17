@@ -43,7 +43,7 @@ export class HomePage {
 
     let options: CameraOptions = {
       quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI, // return the path of the image on the device
+      destinationType: this.camera.DestinationType.NATIVE_URI, // return the path of the image on the device
       sourceType: this.camera.PictureSourceType.CAMERA, // use the camemra to grab the image
       encodingType: this.camera.EncodingType.JPEG, // return the image in jpeg format
       cameraDirection: this.camera.Direction.FRONT, // front facing camera
@@ -51,16 +51,21 @@ export class HomePage {
     }
     this.camera.getPicture(options).then((imagePath) => {
       console.log(imagePath);
-      let currentName = imagePath.replace(/^.*[\\\/]/, '');
+      let currentName = imagePath.match(/(^.*[\\\/])(.*$)/)[2];
+      let currentPath = imagePath.match(/(^.*[\\\/])(.*$)/)[1];
 
       let d = new Date(),
         n = d.getTime(),
         newFileName = n + '.jpg';
+      console.log("currentName =" + currentName);
+      console.log("currentPath =" + currentPath);
       if(this.platform.is('android')){
-        this.file.moveFile(this.file.tempDirectory, currentName, this.file.dataDirectory, newFileName).then((success) => {
+        this.file.moveFile(currentPath, currentName, this.file.dataDirectory, newFileName).then((success) => {
           this.photoTaken = true;
           this.createPhoto(success.nativeURL);
           this.sharePhoto(success.nativeURL);
+          console.log("this.file.dataDirectory =" + this.file.dataDirectory);
+          console.log("newFileName =" + newFileName);
         }, (error) => {
           let promt = this.alert.create('Oops1', 'Something went wrong.'+error);
           promt.present();
@@ -75,12 +80,46 @@ export class HomePage {
   createPhoto(photo) {
     let newPhoto = new PhotoModel(photo, new Date());
     this.photos.unshift(newPhoto);
-    this.dataService.save(this.photos);
+    this.save();
   }
   sharePhoto(url) {
 
   }
+  save() {
+    this.dataService.save(this.photos);
+  }
   loadPhotos() {
-    this.loaded = true;
+    this.dataService.getData().then((photos) => {
+
+      let savedPhoto: any = false;
+      if(typeof(photos) != 'undefined'){
+        savedPhoto = JSON.parse(photos);
+      }
+      if(savedPhoto){
+        savedPhoto.forEach((photo) => {
+          this.photos.push(new PhotoModel(photo.image, 
+            new Date(photo.date)));
+        });
+      }
+      if(this.photos.length > 0) {
+        let today = new Date();
+        if(this.photos[0].date.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)){
+          this.photoTaken = true;
+        }
+      }
+      this.loaded = true;
+    });
+  }
+  removePhoto(photo){
+    let today = new Date();
+    if(photo.date.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)){
+      this.photoTaken = false;
+    }
+    
+    let index = this.photos.indexOf(photo);
+    if(index > -1){
+      this.photos.splice(index, 1);
+      this.save();
+    }
   }
 }

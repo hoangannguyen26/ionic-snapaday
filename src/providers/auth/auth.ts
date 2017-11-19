@@ -14,7 +14,7 @@ export class AuthProvider {
       .then((newUser) => {
         firebase
         .database()
-        .ref(`/userProfile/${newUser}/email`)
+        .ref(`/userProfile/${newUser.uid}/email`)
         .set(email)
         .then(()=> {
         }).catch ((err) => {
@@ -38,6 +38,18 @@ export class AuthProvider {
       throw new Error(err);
     })
 
+  }
+
+  resetPassword(email):Promise<void> {
+    return firebase.auth().sendPasswordResetEmail(email);
+  }
+
+  logoutUser(): Promise<void>{
+    const userId = firebase.auth().currentUser.uid;
+    firebase.database()
+    .ref(`/userProfile/${userId}`)
+    .off();
+    return firebase.auth().signOut();
   }
     
 }

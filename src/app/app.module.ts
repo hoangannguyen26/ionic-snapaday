@@ -14,6 +14,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 
 import { MyApp } from './app.component';
 import { DataProvider } from '../providers/data/data';
+import { AuthProvider } from '../providers/auth/auth';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { DataProvider } from '../providers/data/data';
     Camera,
     SimpleAlert,
     File,
-    SocialSharing
+    SocialSharing,
+    AuthProvider
   ]
 })
 export class AppModule {}

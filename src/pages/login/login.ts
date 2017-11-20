@@ -76,4 +76,24 @@ export class LoginPage {
       this.loading.present();
     }
   }
+  loginFB(){
+    this.authService.loginFaceBook().then(()=>{
+      this.loading.dismiss().then(() => {
+        this.navCtrl.setRoot('HomePage');
+      });
+    }).catch((err) => {
+
+      this.loading.dismiss().then(() => {
+        const alert = this.alertCtrl.create({
+          message: err.message,
+          buttons: [{ text: 'Ok', role: 'cancel'}]
+        });
+        alert.present();
+      })
+
+    });
+
+    this.loading = this.loadingCtrl.create();
+    this.loading.present();
+  }
 }

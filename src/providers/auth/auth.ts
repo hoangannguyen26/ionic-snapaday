@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
+import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 
 @Injectable()
 export class AuthProvider {
 
-  constructor() {
+  constructor(private fb: Facebook) {
   }
 
   signupUser(email: string, password: string): Promise<any> {
@@ -50,6 +51,28 @@ export class AuthProvider {
     .ref(`/userProfile/${userId}`)
     .off();
     return firebase.auth().signOut();
+  }
+
+  loginFaceBook(): Promise<any> {
+    return this.fb.login(['email'])
+    .then((res: FacebookLoginResponse)=>{
+      const fbCredential = firebase.auth.FacebookAuthProvider
+        .credential(res.authResponse.accessToken);
+
+      firebase.auth().signInWithCredential(fbCredential)
+      .then((success) => {
+        console.log("Login success");
+      })
+      .catch((error) => {
+        console.log("Login fail: "+JSON.stringify(error));
+        throw new Error(error);
+      })
+      
+    })
+    .catch((error) => {
+      console.log(error);
+      throw new Error(error);
+    })
   }
     
 }

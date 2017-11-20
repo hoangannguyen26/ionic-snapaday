@@ -8,7 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { SocialSharing } from '@ionic-native/social-sharing';
-
+import { Facebook } from '@ionic-native/facebook';
 
 
 
@@ -40,7 +40,8 @@ import { AuthProvider } from '../providers/auth/auth';
     SimpleAlert,
     File,
     SocialSharing,
-    AuthProvider
+    AuthProvider,
+    Facebook
   ]
 })
 export class AppModule {}

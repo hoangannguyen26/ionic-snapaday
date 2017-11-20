@@ -19,6 +19,7 @@ export class HomePage {
   loaded: boolean = false;
   photoTaken: boolean = false;
   photos: PhotoModel[] = [];
+  avatar_url: string = 'assets/imgs/smile.png';
 
   constructor(public navCtrl: NavController, 
     private socialSharing: SocialSharing,
@@ -28,7 +29,10 @@ export class HomePage {
     private alert: SimpleAlert,
     private alertCtrl: AlertController,
     private file: File, 
+    
     private dataService: DataProvider) {
+
+      
 
       this.loadPhotos();
       document.addEventListener('resume', ()=>{
